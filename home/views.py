@@ -1,4 +1,5 @@
 from re import template
+from ssl import HAS_TLSv1_1
 from xmlrpc.client import NOT_WELLFORMED_ERROR
 from django.http import HttpResponse
 from datetime import datetime
@@ -8,8 +9,7 @@ from home.models import Persona
 from django.shortcuts import render   #herramienta de Django para generar los render
 
 def hola (request):
-    return HttpResponse("Hola a")
-
+    return HttpResponse('<h1> Holaaa</h1> ')
 def fecha (request):
     fecha_y_hora = datetime.now()
     return HttpResponse(f"La fecha y hora actual es {fecha_y_hora}")
