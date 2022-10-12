@@ -6,7 +6,7 @@ from datetime import datetime
 from django.template import Context, Template, loader   #para generar template
 import random
 from home.models import Persona
-from django.shortcuts import render   #herramienta de Django para generar los render
+from django.shortcuts import render, redirect   #herramienta de Django para generar los render
 
 def hola (request):
     return HttpResponse('<h1> Holaaa</h1> ')
@@ -51,18 +51,17 @@ def prueba_template (request):
     
     return HttpResponse(template_renderizado) 
 
-def crear_persona(request, nombre, apellido):
+def crear_persona(request):
     
-    persona = Persona(nombre=nombre, apellido=apellido, edad= random.randrange(1,99), fecha_nacimiento=datetime.now())
-    persona.save()
-    
-    # template = loader.get_template('crear_persona.html')    
-    # template_renderizado = template.render({'persona': persona})
-    # return HttpResponse('')
-    
-    # Reemplazo todo lo anterior por lo siguiente:
-    
-    return render(request, 'home/crear_persona.html', {'persona': persona})   
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        apellido = request.POST['apellido']
+        persona = Persona(nombre=nombre, apellido=apellido, edad= random.randrange(1,99), fecha_nacimiento=datetime.now())
+        persona.save()
+        
+        return redirect ('ver_personas')   #si se guarda el ususario correctamente va a ver prsoansS
+            
+    return render(request, 'home/crear_persona.html', {})   
 
 def ver_personas(request):
     

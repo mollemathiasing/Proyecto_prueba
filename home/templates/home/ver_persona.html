@@ -12,8 +12,8 @@ VER PERSONAS
 {% block index_contenido %}
 <a class="navbar-brand" href = {% url 'index' %}>Index </a>
 <p>Listado de personas:</p>
-{% for persona  in  personas%}
-       <li> {{persona.nombre}} {{persona.apellido}} {{persona.edad}}</li>
+{% for persona  in  personas %}
+       <li> {{persona.nombre}} {{persona.apellido}} {{persona.edad}} </li>
 {% endfor %}
 {% endblock index_contenido %}
     
