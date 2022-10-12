@@ -10,10 +10,18 @@ VER PERSONAS
 
 
 {% block index_contenido %}
-<a class="navbar-brand" href = {% url 'index' %}>Index </a>
+<a class="navbar-brand" href = {% url 'crear_persona' %}>Crear Persona </a>
 <p>Listado de personas:</p>
+
+{% comment %} Creamos un buscador con un formulario ... para buscar se usa un GET{% endcomment %}
+<form action= {% url 'ver_personas' %} method = "GET"> 
+       {{formulario}}  
+       <button>Buscar</button>
+</form>
+<p>
 {% for persona  in  personas %}
-       <li> {{persona.nombre}} {{persona.apellido}} {{persona.edad}} </li>
+        <li>{{persona.nombre}} {{persona.apellido}} {{persona.edad}}</li>
 {% endfor %}
+</p>
 {% endblock index_contenido %}
     

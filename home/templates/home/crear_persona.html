@@ -1,5 +1,29 @@
 {% extends 'home/base.html' %}
 
+
+{% block title_pagina %}
+<title>Crear persona</title>
+{% endblock title_pagina %}
+
+
+{% block mi_contenido  %}
+<form action= {% url 'crear_persona' %} method = "POST">
+    {% csrf_token %}
+    <table>
+        {{formulario}}
+    </table>
+    
+    <button>Crear</button>
+</form>
+{% endblock mi_contenido  %}
+
+
+
+
+{% comment %} ANTES DE APLICAR FORMULARIO DE DJANGO {% endcomment %}
+
+{% comment %} {% extends 'home/base.html' %}
+
 {% block title_pagina %}
 <title>Crear persona</title>
 {% endblock title_pagina %}
@@ -19,9 +43,13 @@
 
     {% comment %} <input type="button" value="Crear"> {% endcomment %}      <!-- 3 formas distintas de hacer un button-->
     {% comment %} <input type="submit" value="Crear"> {% endcomment %}
-    <button>Crear</button>
+    {% comment %} <button>Crear</button>
 
 
 </form>
-{% endblock mi_contenido  %}
+{% endblock mi_contenido  %} {% endcomment %}
+
+
+
+
  

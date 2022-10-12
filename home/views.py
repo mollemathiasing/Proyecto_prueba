@@ -7,6 +7,7 @@ from django.template import Context, Template, loader   #para generar template
 import random
 from home.models import Persona
 from django.shortcuts import render, redirect   #herramienta de Django para generar los render
+from home.forms import BusquedaPersonaFormulario, PersonaFormulario
 
 def hola (request):
     return HttpResponse('<h1> Holaaa</h1> ')
@@ -51,23 +52,49 @@ def prueba_template (request):
     
     return HttpResponse(template_renderizado) 
 
+# CREAR PERSONA ANTES DE FORMULARIO DE DJANGO
+
+# def crear_persona(request):
+    
+#     if request.method == 'POST':
+#         nombre = request.POST.get('nombre')
+#         apellido = request.POST['apellido']
+#         persona = Persona(nombre=nombre, apellido=apellido, edad= random.randrange(1,99), fecha_nacimiento=datetime.now())
+#         persona.save()
+        
+#         return redirect ('ver_personas')   #si se guarda el ususario correctamente va a ver prsoansS
+            
+#     return render(request, 'home/crear_persona.html', {})   
+
 def crear_persona(request):
     
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        apellido = request.POST['apellido']
-        persona = Persona(nombre=nombre, apellido=apellido, edad= random.randrange(1,99), fecha_nacimiento=datetime.now())
-        persona.save()
         
-        return redirect ('ver_personas')   #si se guarda el ususario correctamente va a ver prsoansS
+        formulario = PersonaFormulario(request.POST)
+        
+        if formulario.is_valid():
+            data = formulario.cleaned_data  #atributo de los formualrios q una vez validados te da la info limpia q vamos a poder usar
+               
+            nombre = data['nombre']
+            apellido = data['apellido']
+            edad = data['edad']
+            fecha_nacimiento = data.get('fecha_nacimiento', datetime.now())  #si viene una fecha la uso, sino usa el datetime.now
             
-    return render(request, 'home/crear_persona.html', {})   
+            
+            persona = Persona(nombre=nombre, apellido=apellido, edad=edad, fecha_nacimiento=fecha_nacimiento)
+            persona.save()
+        
+            return redirect ('ver_personas')   #si se guarda el ususario correctamente va a ver personas
+    
+    formulario = PersonaFormulario()
+            
+    return render(request, 'home/crear_persona.html', {'formulario': formulario})   
 
 def ver_personas(request):
     
     #le paso a la base de datos todfos los objetos de personas
     
-    persona = Persona.objects.all()
+    # persona = Persona.objects.all()
     
     # template = loader.get_template('ver_persona.html')    
     # template_renderizado = template.render({'personas': persona})
@@ -75,7 +102,16 @@ def ver_personas(request):
     
     # Reemplazo todo lo anterior por lo siguiente:
     
-    return render(request, 'home/ver_persona.html', {'personas': persona})
+    nombre = request.GET.get('nombre', None)
+    
+    if nombre:
+        personas = Persona.objects.filter(nombre__icontains=nombre)
+    else:
+        personas = Persona.objects.all()
+    
+    formulario = BusquedaPersonaFormulario()
+    
+    return render(request, 'home/ver_persona.html', {'personas': personas, 'formulario' : formulario})
 
 def index(request):
     
