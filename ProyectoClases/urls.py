@@ -18,6 +18,9 @@ from django.urls import path, include
 
 
 urlpatterns = [
-    path('', include('home.urls')),
+    path('', include('home.urls')),    #para acceder a las vsitas de las aplicacines a ta¿raves de sus urls
+    
+    path('avanzado/', include('avanzado.urls')),        #hay a agregar avanzado/ en el path del buscador
+    
     path('admin/', admin.site.urls),
 ]

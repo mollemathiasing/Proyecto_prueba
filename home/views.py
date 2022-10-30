@@ -1,5 +1,4 @@
 from re import template
-from ssl import HAS_TLSv1_1
 from xmlrpc.client import NOT_WELLFORMED_ERROR
 from django.http import HttpResponse
 from datetime import datetime
@@ -28,13 +27,7 @@ def mi_template (request):
     return HttpResponse(template_renderizado)                                                                              #pasamos el template al http response
 
 def tu_template (request, nombre):
-    # cargar_archivo = open(r'C:\Users\Mathias\Documents\Python - Coderhouse\Proyecto-clases\home\templates\tu_template.html', 'r')  #llamamos el archivo al cual le queremos hacer un template
-    # template = Template(cargar_archivo.read())                                                                             #con esto generamos un template del archivo q teniamos enn html
-    # cargar_archivo.close()                                                                             #cerramos el archivo
-    # contexto = Context({'persona': nombre})                                                                                #creamos un contexto, tiene la inforkación q le queremos pasar al templateS
-    # template_renderizado= template.render(contexto)                                                                       #puesta en marcha, dibujamos el template 
-    
-    #forma simplificada:
+   
     template = loader.get_template('home/tu_template.html')    #La direccion de la carpeta no la puse completa porq la asigne en el archivo settings en DIR
     template_renderizado = template.render({'persona': nombre})
     
@@ -52,20 +45,6 @@ def prueba_template (request):
     
     return HttpResponse(template_renderizado) 
 
-# CREAR PERSONA ANTES DE FORMULARIO DE DJANGO
-
-# def crear_persona(request):
-    
-#     if request.method == 'POST':
-#         nombre = request.POST.get('nombre')
-#         apellido = request.POST['apellido']
-#         persona = Persona(nombre=nombre, apellido=apellido, edad= random.randrange(1,99), fecha_nacimiento=datetime.now())
-#         persona.save()
-        
-#         return redirect ('ver_personas')   #si se guarda el ususario correctamente va a ver prsoansS
-            
-#     return render(request, 'home/crear_persona.html', {})   
-
 def crear_persona(request):
     
     if request.method == 'POST':
@@ -78,9 +57,11 @@ def crear_persona(request):
             nombre = data['nombre']
             apellido = data['apellido']
             edad = data['edad']
-            fecha_nacimiento = data.get('fecha_nacimiento', datetime.now())  #si viene una fecha la uso, sino usa el datetime.now
-            
-            
+            fecha_nacimiento = data['fecha_nacimiento'] 
+            if not fecha_nacimiento:                     #si viene una fecha la uso, sino usa el datetime.now
+                fecha_nacimiento = datetime.now()
+                
+                                  
             persona = Persona(nombre=nombre, apellido=apellido, edad=edad, fecha_nacimiento=fecha_nacimiento)
             persona.save()
         
@@ -91,16 +72,6 @@ def crear_persona(request):
     return render(request, 'home/crear_persona.html', {'formulario': formulario})   
 
 def ver_personas(request):
-    
-    #le paso a la base de datos todfos los objetos de personas
-    
-    # persona = Persona.objects.all()
-    
-    # template = loader.get_template('ver_persona.html')    
-    # template_renderizado = template.render({'personas': persona})
-    # return HttpResponse(template_renderizado)
-    
-    # Reemplazo todo lo anterior por lo siguiente:
     
     nombre = request.GET.get('nombre', None)
     
@@ -116,3 +87,8 @@ def ver_personas(request):
 def index(request):
     
     return render(request, 'home/index.html')
+
+def eliminar_persona(request, id):
+    persona = Persona.objects.get(id = id)
+    persona.delete()
+    return redirect ('ver_personas')

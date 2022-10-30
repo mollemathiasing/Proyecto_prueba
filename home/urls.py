@@ -2,7 +2,7 @@ from django.urls import path
 from home import views
 
 urlpatterns = [
-    path ('', views.index, name = 'index'),
+    path ('', views.index, name = 'index'),                    # el name es para poder crear botoenes q me dirijan a esa vista(pagina)
     path('hola/', views.hola, name = 'hola'),
     path('fecha/', views.fecha, name = 'fecha'),
     path('fecha-nacimiento/<int:edad>', views.fecha_nacimiento),
@@ -11,6 +11,7 @@ urlpatterns = [
     path('prueba_template/', views.prueba_template),
     path('ver_personas/', views.ver_personas, name = 'ver_personas'),
     path('crear_persona', views.crear_persona, name = 'crear_persona'),
+    path('eliminar/<int:id>', views.eliminar_persona, name = 'eliminar_persona'),
 ]
 
 

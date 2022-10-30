@@ -1,0 +1,19 @@
+{% extends 'padres/base.html' %}
+
+
+{% block title_pagina %}
+<title>Crear mascota</title>
+{% endblock title_pagina %}
+
+
+{% block mi_contenido  %}
+<form action= {% url 'crear_mascota' %} method = "POST">
+    {% csrf_token %}
+    <table>
+        {{form}}            
+            {% comment %} django usa por defecto form, nosotros habiamos llamado a forumalrio aca {% endcomment %}
+    </table>
+    
+    <button>Crear</button>
+</form>
+{% endblock mi_contenido  %}

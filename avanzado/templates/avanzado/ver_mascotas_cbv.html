@@ -1,0 +1,34 @@
+{% extends 'padres/base.html' %}
+
+{% block title_pagina %}
+        <title>Ver mascotas</title>
+{% endblock title_pagina %}
+
+
+{% block mi_contenido %}
+        <a class="navbar-brand" href = {% url 'crear_mascota' %}>Crear Mascota </a> 
+        <p>Listado de mascotas:</p>
+
+        {% comment %} Creamos un buscador con un formulario ... para buscar se usa un GET{% endcomment %}
+        {% comment %} <form action= {% url 'ver_mascotas' %} method = "GET"> 
+        {{formulario}}  
+        <button>Buscar</button>
+        </form>  {% endcomment %}
+        <p>
+        {% if object_list %}
+                {% for mascota  in  object_list %}
+                        <li>
+                                {{mascota}}
+                               
+                                        <a  href = {% url 'editar_mascota' mascota.id %}>Editar </a> 
+                                                           {% comment %} boton editar {% endcomment %}
+                                        <a  href = {% url 'eliminar_mascota' mascota.id %}>Eliminar </a> 
+                                                           {% comment %} boton eliminar {% endcomment %}
+                        </li>
+                {% endfor %}
+        {% else %}
+                <p>No se encontraron mascotas</p>
+        {% endif %}
+
+        </p>
+{% endblock mi_contenido %}
