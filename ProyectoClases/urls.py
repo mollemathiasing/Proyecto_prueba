@@ -22,5 +22,7 @@ urlpatterns = [
     
     path('avanzado/', include('avanzado.urls')),        #hay a agregar avanzado/ en el path del buscador
     
+    path('accounts/', include('accounts.urls')),           # cuentas de usuario, para login y logout
+    
     path('admin/', admin.site.urls),
 ]

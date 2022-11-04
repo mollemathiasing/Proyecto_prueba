@@ -6,6 +6,8 @@ from avanzado.forms import MascotaFormulario
 from django.views.generic import ListView     #CLASE BASADA EN VISTA DE DJANGO
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
+from django.contrib.auth.mixins import LoginRequiredMixin           #limita  ausuario q no esta lo0gueado para acceder a una pate de nuestra pagina PARA CALSES BASADAS EN VISTA
+#from django.contrib.auth.decorators import login_required           #limita  ausuario q no esta lo0gueado para acceder a una pate de nuestra pagina PARA VISTA NORMAL
 
 
 def ver_mascotas(request):
@@ -14,7 +16,7 @@ def ver_mascotas(request):
     
     return render(request, 'avanzado/ver_mascotas.html', {'mascotas' : mascotas})
 
-
+# @login_required
 def crear_mascota(request):
     
     if request.method == 'POST':
@@ -89,14 +91,14 @@ class ListaMascotas(ListView):          #La clases ListaMascotas hereda de ListV
     template_name =  'avanzado/ver_mascotas_cbv.html'                   #Nombre del template q va a usar esta clase
     
 
-class CrearMascota(CreateView):
+class CrearMascota(LoginRequiredMixin, CreateView):
     model = Mascota
     success_url =   '/avanzado/mascotas/'                                   #Direccion a la cual accede cuando se crea una mascota correctamente 
     template_name =  'avanzado/crear_mascota_cbv.html'                    #Le decimos a que template ir
     fields =  ['nombre', 'tipo', 'edad', 'fecha_nacimiento']      #Datos del formulario q queremos q tenga
     
     
-class EditarMascota(UpdateView):
+class EditarMascota(LoginRequiredMixin, UpdateView):
     model = Mascota
     success_url =   '/avanzado/mascotas/'                                   #Direccion a la cual accede cuando se crea una mascota correctamente 
     template_name =  'avanzado/editar_mascota_cbv.html'                    #Le decimos a que template ir
